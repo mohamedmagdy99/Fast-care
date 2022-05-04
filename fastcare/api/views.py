@@ -1,9 +1,14 @@
 from rest_framework import viewsets
-from api.models import Blood, Room, FindById, FindByClothe
-from api.serializers import FindByClothesSerializer, FindByIdSerializer, BloodTypeSerializer, RoomSerializer,LoginSerializer, UserSerializer
-from rest_framework import generics, permissions
+from api.models import Blood, Hospital, Room, FindById, FindByClothe
+from api.serializers import FindByClothesSerializer, FindByIdSerializer, BloodTypeSerializer, RoomSerializer, LoginSerializer, UserSerializer, HospitalSerializer
+from rest_framework import generics
 from rest_framework.response import Response
 from knox.models import AuthToken
+
+
+class HospitalList(viewsets.ModelViewSet):
+    serializer_class = HospitalSerializer
+    queryset = Hospital.objects.all()
 
 
 class BloodList(viewsets.ModelViewSet):
@@ -53,11 +58,10 @@ class SignInAPI(generics.GenericAPIView):
         })
 
 
-class MainUser(generics.RetrieveAPIView):
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
-    serializer_class = UserSerializer
-
-    def get_object(self):
-        return self.request.user
+# class MainUser(generics.RetrieveAPIView):
+#     permission_classes = [
+#         permissions.IsAuthenticated
+#     ]
+#     serializer_class = UserSerializer
+#     def get_object(self):
+#         return self.request.user

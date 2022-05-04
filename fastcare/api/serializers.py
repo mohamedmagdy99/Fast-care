@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from api.models import Hospital, Room, FindByClothe, FindById, Blood
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
+
+User = get_user_model()
 
 
 class HospitalSerializer(serializers.ModelSerializer):
@@ -13,7 +14,8 @@ class HospitalSerializer(serializers.ModelSerializer):
                   'phone',
                   'longtitude',
                   'latitude',
-                  'covid']
+                  'covid',
+                  'id']
 
 
 class RoomSerializer(serializers.ModelSerializer):
@@ -35,7 +37,11 @@ class RoomSerializer(serializers.ModelSerializer):
                   'hospital_name',
                   'hospital_phone',
                   'hospital_longtitude',
-                  'hospital_latitude']
+                  'hospital_latitude',
+                  'hospital']
+        extra_kwargs = {
+            'hospital': {'write_only': True},
+        }
 
 
 class FindByClothesSerializer(serializers.ModelSerializer):
@@ -55,7 +61,11 @@ class FindByClothesSerializer(serializers.ModelSerializer):
                   'case',
                   'reason',
                   'hospital_name',
-                  'hospital_phone']
+                  'hospital_phone',
+                  'hospital']
+        extra_kwargs = {
+            'hospital': {'write_only': True},
+        }
 
 
 class FindByIdSerializer(serializers.ModelSerializer):
@@ -73,7 +83,11 @@ class FindByIdSerializer(serializers.ModelSerializer):
                   'case',
                   'reason',
                   'hospital_name',
-                  'hospital_phone']
+                  'hospital_phone',
+                  'hospital']
+        extra_kwargs = {
+            'hospital': {'write_only': True},
+        }
 
 
 class BloodTypeSerializer(serializers.ModelSerializer):
@@ -94,16 +108,19 @@ class BloodTypeSerializer(serializers.ModelSerializer):
                   'hospital_name',
                   'hospital_longtitude',
                   'hospital_latitude',
-                  'hospital_phone']
+                  'hospital_phone',
+                  'hospital']
+        extra_kwargs = {
+            'hospital': {'write_only': True},
+        }
 
 
 class UserSerializer(serializers.ModelSerializer):
-    hospital_name = serializers.CharField(
-        source='hospital.name', read_only=True)
+    hospital_name = serializers.RelatedField(source='hospital', read_only=True)
 
     class Meta:
         model = User
-        fields = ['username','hospital_name']
+        fields = ['username', 'hospital_name']
 
 
 class LoginSerializer(serializers.Serializer):

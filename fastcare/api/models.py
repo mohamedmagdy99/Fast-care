@@ -1,6 +1,6 @@
+from email.policy import default
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
 
 
 class Hospital(models.Model):
@@ -13,10 +13,13 @@ class Hospital(models.Model):
     def __str__(self):
         return self.name
 
+
 class User(AbstractUser):
-    name = models.CharField(blank=True,max_length=50)
-    first_name =models.CharField(blank=True,max_length=50)
-    hospital = models.ForeignKey(Hospital,on_delete=models.CASCADE, blank=True)
+    name = models.CharField(blank=True, max_length=50)
+    first_name = models.CharField(blank=True, max_length=50)
+    hospital = models.ForeignKey(
+        Hospital, on_delete=models.CASCADE, blank=True, null=True)
+
 
 class Blood(models.Model):
     type = models.CharField(max_length=10)
@@ -60,4 +63,3 @@ class Room(models.Model):
     type = models.CharField(max_length=10)
     available = models.BooleanField(null=False, default=False)
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, null=True)
-
